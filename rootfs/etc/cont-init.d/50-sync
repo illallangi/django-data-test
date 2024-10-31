@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+echo "Running migrations"
+/usr/bin/python3 /app/src/manage.py synchronize

@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+compgen -A variable | grep ^DATA_PLUGIN_ | while read -r DATA_PLUGIN; do
+    echo "Installing ${!DATA_PLUGIN}"
+    pip install "${!DATA_PLUGIN}" --break-system-packages
+done

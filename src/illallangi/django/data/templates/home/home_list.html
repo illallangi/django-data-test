@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Welcome to data.coley.au</h1>
+            <p class="lead">
+                Just another personal data lake, tracking {{ object_count }} objects across {{ model_count }} models.
+                Feel free to explore!
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        {% for obj in page.object_list %}
+            <div class="col-3">
+                <div class="card">
+                    <img class="card-img-top"
+                         src="{% static obj.icon %}"
+                         alt="{{ obj.plural }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ obj.plural }}</h5>
+                        <p class="card-text">{{ obj.description }}</p>
+                        <a href="{% url obj.url %}" class="btn btn-primary">View {{ obj.count }} {{ obj.plural }}</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-warning col-12" role="alert">No models found!</div>
+        {% endfor %}
+    </div>
+{% endblock content %}

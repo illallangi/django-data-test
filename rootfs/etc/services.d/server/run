@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+# Run the server if DATA_ENABLE_SERVER is true
+if [[ ${DATA_ENABLE_SERVER} == "true" ]]; then
+    /usr/bin/python3 /app/src/manage.py runserver --noreload 0.0.0.0:${DATA_PORT}
+else
+    echo "DATA_ENABLE_SERVER is not true, not running the server"
+    tail -f /dev/null
+fi

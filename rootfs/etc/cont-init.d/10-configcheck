@@ -1,0 +1,32 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+# Check if DJANGO_SECRET_KEY is set and die if not
+if [ -z "${DJANGO_SECRET_KEY}" ]; then
+    echo "DJANGO_SECRET_KEY is not set. Exiting."
+    exit 1
+fi
+
+# Check if DATA_CONFIG_DIR is set and die if not
+if [ -z "${DATA_CONFIG_DIR}" ]; then
+    echo "DATA_CONFIG_DIR is not set. Exiting."
+    exit 1
+fi
+
+# Check if DATA_CONFIG_DIR exists and create if not
+if [ ! -d "${DATA_CONFIG_DIR}" ]; then
+    echo "DATA_CONFIG_DIR does not exist. Creating."
+    mkdir -p "${DATA_CONFIG_DIR}"
+fi
+
+# Check if XDG_CONFIG_HOME exists and create if not
+if [ ! -d "${XDG_CONFIG_HOME}" ]; then
+    echo "XDG_CONFIG_HOME does not exist. Creating."
+    mkdir -p "${XDG_CONFIG_HOME}"
+fi
+
+# Check if DATA_PORT is set and die if not
+if [ -z "${DATA_PORT}" ]; then
+    echo "DATA_PORT is not set. Exiting."
+    exit 1
+fi

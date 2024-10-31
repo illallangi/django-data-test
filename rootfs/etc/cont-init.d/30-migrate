@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+if [[ ${DATA_DO_MIGRATIONS} != "true" ]]; then
+
+    echo "DATA_DO_MIGRATIONS is not true, waiting for someone else to migrate the database"
+    while ! /usr/bin/python3 /app/src/manage.py showmigrations | grep "\[ \]"  | wc -l | grep -q "0"; do
+        sleep 1
+        echo "$(/usr/bin/python3 /app/src/manage.py showmigrations | grep "\[ \]"  | wc -l) migrations left"
+    done
+
+else
+
+    echo "Running migrations"
+    /usr/bin/python3 /app/src/manage.py migrate --noinput
+
+    echo "Creating superuser"
+    /usr/bin/python3 /app/src/manage.py createsuperuserwithpassword --username admin --email me@example.com --password admin --preserve
+
+fi

@@ -1,0 +1,12 @@
+.git
+.github
+.ruff_cache
+.venv
+dist
+src/**/db.sqlite3
+.dockerignore
+.gitignore
+.pre-commit-config.yaml
+Dockerfile
+LICENSE
+Makefile

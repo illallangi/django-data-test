@@ -1,0 +1,111 @@
+{% load django_htmx %}
+{% load static %}
+{% load home_breadcrumbs %}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+    <head>
+        <title>{{ breadcrumbs | breadcrumbs_title }}</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css"
+              integrity="sha512-rt/SrQ4UNIaGfDyEXZtNcyWvQeOq0QLygHluFQcSjaGB04IxWhal71tKuzP6K8eYXYB6vJV4pHkXcmFGGQ1/0w=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer" />
+        {% for link in links %}
+            {% if link.rel == "alternate" and link.type == "text/html" %}
+                <link rel="canonical" href="{{ link.href }}" />
+            {% endif %}
+            <link rel="{{ link.rel }}"
+                  href="{{ link.href }}"
+                  {% if link.type %}type="{{ link.type }}"{% endif %} />
+        {% endfor %}
+        <meta name="description"
+              content="Welcome to data.coley.au, just another personal data lake" />
+        <meta name="keywords"
+              content="data, coley, data lake, andrew cole, illallangi" />
+        <style>
+            #main {
+                background-color: white;
+                border-radius: .25rem;
+                padding: .75rem 1rem;
+            }
+        </style>
+        {% block style %}
+        {% endblock style %}
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'home_list' %}">
+                        <img src="{% url 'favicon' %}"
+                             width="30"
+                             height="30"
+                             class="d-inline-block align-middle"
+                             alt="">
+                        data.coley.au
+                    </a>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarCollapse"
+                            aria-controls="navbarCollapse"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+        <main class="flex-shrink-0">
+            <div class="container mt-5" id="content">
+                <br />
+                {% for breadcrumb in breadcrumbs %}
+                    {% if forloop.first %}
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            {% endif %}
+                            <li class="breadcrumb-item{% if forloop.last %} active{% endif %}"
+                                aria-current="page">
+                                {% if breadcrumb.url %}<a href="{{ breadcrumb.url }}">{% endif %}
+                                    {{ breadcrumb.title }}
+                                    {% if breadcrumb.url %}</a>{% endif %}
+                            </li>
+                            {% if forloop.last %}
+                            </ol>
+                        </nav>
+                    {% endif %}
+                {% endfor %}
+                <div id="main">
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js"
+            integrity="sha512-7rusk8kGPFynZWu26OKbTeI+QPoYchtxsmPeBqkHIEXJxeun4yJ4ISYe7C6sz9wdxeE1Gk3VxsIWgCZTc+vX3g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/2.0.2/htmx.min.js"
+            integrity="sha512-iRA+DJgDLUKPk+pqGpAM3+wSDeO5iKQkYXGtIv4+EA8oJWN1mewMJD7kWC9hHCyUTdey9bQypAhx6PASWShjOw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    {% django_htmx_script %}
+    <script>
+        htmx.config.getCacheBusterParam = true
+    </script>
+    <script>
+        htmx.onLoad(function(elt) {
+            $(".table").on("click", "td[role=\"button\"]", function(e) {
+                window.location = $(this).data("href");
+            });
+            $(".table").on("click", "tr[role=\"button\"]", function(e) {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+</html>
